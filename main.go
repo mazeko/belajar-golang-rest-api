@@ -3,8 +3,9 @@ package main
 import (
 	"belajar-goalng-rest-api/app"
 	"belajar-goalng-rest-api/controller"
-	"belajar-goalng-rest-api/helper"
 	"belajar-goalng-rest-api/exception"
+	"belajar-goalng-rest-api/helper"
+	"belajar-goalng-rest-api/middleware"
 	"belajar-goalng-rest-api/repository"
 	"belajar-goalng-rest-api/service"
 	"net/http"
@@ -36,7 +37,7 @@ func main() {
 
 	server := http.Server{
 		Addr:    "localhost:3000",
-		Handler: router,
+		Handler: middleware.NewAuthMiddleware(router),
 	}
 
 	err := server.ListenAndServe()
