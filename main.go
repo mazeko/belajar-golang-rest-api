@@ -13,7 +13,6 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
@@ -23,15 +22,9 @@ func main() {
 
 	categoryRepository := repository.NewCategoryRepository()
 	categoryService := service.NewCategoryService(categoryRepository, db, validate)
-	categtoryController := controller.NewCategoryController(categoryService)
+	categoryController := controller.NewCategoryController(categoryService)
 
-	router := httprouter.New()
-
-	router.GET("/api/categories", categtoryController.FindAll)
-	router.GET("/api/categories/:categoryId", categtoryController.FindById)
-	router.POST("/api/categories", categtoryController.Create)
-	router.PUT("/api/categories/:categoryId", categtoryController.Update)
-	router.DELETE("/api/categories/:categoryId", categtoryController.Delete)
+	router := app.NewRouter(categoryController)
 
 	router.PanicHandler = exception.ErrorHandler
 
